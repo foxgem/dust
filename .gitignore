@@ -1,0 +1,9 @@
+*.log
+*.vertx
+build
+*.tmp
+*.jceks
+.*
+file-uploads
+!.gitignore
+*.iml

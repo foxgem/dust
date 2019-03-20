@@ -1,0 +1,44 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'java'
+apply plugin: 'application'
+
+if (!JavaVersion.current().java8Compatible) {
+    throw new IllegalStateException('''Please install Java 8!'''.stripMargin())
+}
+
+repositories {
+    mavenLocal()
+    jcenter()
+    mavenCentral()
+    maven { url 'http://repo.gradle.org/gradle/libs-releases-local' }
+}
+
+dependencies {
+    compile "info.picocli:picocli:${PICOCLI_VER}"
+    compile "org.gradle:gradle-tooling-api:${GRADLE_VER}"
+}
+
+version = '0.0.1'
+
+mainClassName = 'top.dteam.dust.Cli'
+
+shadowJar {
+    classifier = 'fat'
+    baseName = 'dust'
+}
+
+tasks.withType(Tar) {
+    compression = Compression.GZIP
+    extension = 'tar.gz'
+}

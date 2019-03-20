@@ -1,0 +1,54 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'groovy'
+}
+
+if (!JavaVersion.current().java8Compatible) {
+    throw new IllegalStateException('''Please install Java 8!'''.stripMargin())
+}
+
+sourceSets.main.groovy.srcDirs += ["migrations"]
+sourceSets.test.groovy.srcDirs += ["test/groovy"]
+
+repositories {
+    mavenLocal()
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.codehaus.groovy:groovy:${GROOVY_VER}"
+    compile "org.codehaus.groovy:groovy-json:${GROOVY_VER}"
+    compile "org.flywaydb:flyway-core:${FLYWAY_VER}"
+    testCompile("org.spockframework:spock-core:${SPOCK_VER}") {
+        exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+    }
+    runtime 'org.postgresql:postgresql:42.2.5'
+
+    testCompile "org.testcontainers:spock:1.10.6"
+    testCompile 'com.zaxxer:HikariCP:3.3.1'
+    testCompile "org.testcontainers:postgresql:1.10.6"
+    testRuntime 'cglib:cglib-nodep:3.2.8'
+    testRuntime 'org.objenesis:objenesis:3.0'
+    testRuntime "ch.qos.logback:logback-classic:1.2.3"
+}
+
+test {
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
+task deploy(dependsOn: classes, type: JavaExec) {
+    main = "MigrationApp"
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperties System.getProperties()
+    args System.getProperty("exec.args", " ").split()
+}

@@ -1,0 +1,12 @@
+{
+  "development": {
+    "url": "jdbc:postgresql://127.0.0.1:5432/earth_test?useUnicode=true&characterEncoding=utf8",
+    "user": "earth_admin",
+    "password": "admin"
+  },
+  "production": {
+    "url": "jdbc:postgresql://127.0.0.1:5432/jupiter_test?useUnicode=true&characterEncoding=utf8",
+    "user": "jupiter_admin",
+    "password": "admin"
+  }
+}
