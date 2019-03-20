@@ -27,9 +27,9 @@ Dust的诞生离不开成功开源软件的支持：
 
 - git clone \< dust 代码仓库\>
 - 方法1：
-  - gradle installdist，它将在工程的 build/install/dust/ 下安装，bin目录下为可执行文件
+  - gradlew installdist，它将在工程的 build/install/dust/ 下安装，bin目录下为可执行文件
 - 方法2：生成安装包
-  - gradle distTar/distZip，将生成tar或zip的安装包
+  - gradlew distTar/distZip，将生成tar或zip的安装包
 
 ## 使用
 
@@ -105,7 +105,7 @@ dust deploy --datasource myds
     ~~~
 1. 在test中使用所选数据库对应的testcontainer，实际例子可以参照 /test/DatabaseSpec.groovy。
 
-## 关于部署
+## 部署脚本
 
 部署脚本放置于 migrations 目录，不要删除或修改以下几个文件：
 - DustBaseMigration.java
@@ -123,4 +123,6 @@ protected String[] files() {
 }
 ~~~
 
-由于迁移脚本采用的是 flyway 的 Java-based migrations ，若发现当前提供的 DustBaseMigration 类无法满足你的要求，请直接使用 flyway 提供的相应工具类。
+由于迁移脚本采用的是 flyway 的 Java-based migrations ，若发现当前提供的 DustBaseMigration 类无法满足你的要求，请直接使用 flyway 提供的相应工具类。同时，dust也采用了 flyway 的命名规范。我个人推荐“Versioned Migrations”，不建议采用“Repeatable Migrations”。因为在实际情况中，后者使得制品历史消失了，本身已经违背了引入Migration的目的。而且，DML类的变动总涉及到数据的迁移，因此坚持“一直前向”是最适合的策略。而且，为了避免频繁修改脚本，我建议不要在项目早期引入dbmigration，而是待数据库制品都相对稳定时，再开始不迟。
+
+dust在迁移时会自动baseline，同时设置迁移版本为0，因此创建迁移脚本时V后的数字务必大于0。
