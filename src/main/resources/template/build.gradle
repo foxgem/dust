@@ -27,9 +27,7 @@ dependencies {
     compile "org.codehaus.groovy:groovy:${GROOVY_VER}"
     compile "org.codehaus.groovy:groovy-json:${GROOVY_VER}"
     compile "org.flywaydb:flyway-core:${FLYWAY_VER}"
-    testCompile("org.spockframework:spock-core:${SPOCK_VER}") {
-        exclude group: 'org.codehaus.groovy', module: 'groovy-all'
-    }
+    testCompile("org.spockframework:spock-core:${SPOCK_VER}")
     runtime 'org.postgresql:postgresql:42.2.5'
 
     testCompile "org.testcontainers:spock:1.10.6"
